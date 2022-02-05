@@ -129,6 +129,7 @@ function initDT() {
       { width: '120px', targets: 8 }, // date
     ],
     pageLength: userPageLength,
+    lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
     order: [[sortColumnIdx, 'desc']],
     createdRow: function (row, _, index) {
       $('[data-toggle=popover]', row).popover();
