@@ -67,7 +67,7 @@ function updateDT(data) {
   let forks = [];
   for (let fork of data) {
     fork.repoLink = `<a href="https://github.com/${fork.full_name}">Link</a>`;
-    fork.ownerName = fork.owner.login;
+    fork.ownerName = `<a href="https://github.com/${fork.owner.login}">${fork.owner.login}</a>`;
     forks.push(fork);
   }
   const dataSet = forks.map((fork) =>
@@ -75,7 +75,27 @@ function updateDT(data) {
   );
   window.forkTable.clear().rows.add(dataSet).draw();
 }
+function humanFileSize(bytes, si=false, dp=1) {
+  const thresh = si ? 1000 : 1024;
 
+  if (Math.abs(bytes) < thresh) {
+    return bytes + ' B';
+  }
+
+  const units = si 
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  let u = -1;
+  const r = 10**dp;
+
+  do {
+    bytes /= thresh;
+    ++u;
+  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+  return bytes.toFixed(dp) + ' ' + units[u];
+}
 function initDT() {
   // Create ordered Object with column name and mapped display name
   window.columnNamesMap = [
